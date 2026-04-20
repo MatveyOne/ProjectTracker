@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Flask / local data
+instance/
+*.db
+*.sqlite
+*.sqlite3
+
+# Uploads and generated files
+app/uploads/
+uploads/
+*.csv
+
+# Environment files
+.env
+.env.*
+
+# Internal local workspace
+.local/
+
+# IDE
+.idea/
+.vscode/
+
+# macOS
+.DS_Store
