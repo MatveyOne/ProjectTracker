@@ -18,6 +18,11 @@ def create_app(config_class=Config):
     with app.app_context():
         from app import models, service_models  # noqa: F401
 
+    @app.cli.command("init-db")
+    def init_db():
+        db.create_all()
+        print("Базы данных и таблицы созданы.")
+
     app.register_blueprint(main_bp)
 
     return app

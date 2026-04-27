@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}{{ project.title }}{% endblock %}
+
+{% block content %}
+<h1>{{ project.title }}</h1>
+<p>{{ project.description }}</p>
+
+<p><a href="{{ url_for('main.teacher_stage_new', project_id=project.id) }}">Добавить этап</a></p>
+
+<h2>Этапы</h2>
+{% if project.stages %}
+    <ul>
+        {% for stage in project.stages %}
+            <li>
+                {{ stage.order_num }}. {{ stage.title }}
+                <a href="{{ url_for('main.teacher_stage_edit', stage_id=stage.id) }}">Редактировать</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Этапов пока нет.</p>
+{% endif %}
+
+<h2>Ученики</h2>
+{% if project.student_links %}
+    <ul>
+        {% for link in project.student_links %}
+            <li>
+                <a href="{{ url_for('main.teacher_student_detail', student_id=link.student.id, project_id=project.id) }}">
+                    {{ link.student.name }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Ученики пока не привязаны.</p>
+{% endif %}
+{% endblock %}

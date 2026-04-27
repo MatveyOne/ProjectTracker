@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}{% if stage %}Редактирование этапа{% else %}Новый этап{% endif %}{% endblock %}
+
+{% block content %}
+<h1>{% if stage %}Редактирование этапа{% else %}Новый этап{% endif %}</h1>
+<form method="post">
+    <input name="project_id" type="hidden" value="{{ project.id }}">
+    <p>
+        <label for="title">Название этапа</label>
+        <input id="title" name="title" type="text" value="{{ stage.title if stage else '' }}" required>
+    </p>
+    <p>
+        <label for="description">Описание этапа</label>
+        <textarea id="description" name="description" required>{{ stage.description if stage else '' }}</textarea>
+    </p>
+    <p>
+        <label for="deadline">Дедлайн</label>
+        <input
+            id="deadline"
+            name="deadline"
+            type="datetime-local"
+            value="{{ stage.deadline.strftime('%Y-%m-%dT%H:%M') if stage else '' }}"
+            required
+        >
+    </p>
+    <p>
+        <label for="order_num">Порядковый номер</label>
+        <input id="order_num" name="order_num" type="number" min="1" value="{{ stage.order_num if stage else '' }}" required>
+    </p>
+    <button type="submit">{% if stage %}Сохранить этап{% else %}Создать этап{% endif %}</button>
+</form>
+{% endblock %}

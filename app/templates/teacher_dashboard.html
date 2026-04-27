@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}Кабинет учителя{% endblock %}
+
+{% block content %}
+<h1>Кабинет учителя</h1>
+<p>Вы вошли как учитель.</p>
+<p><a href="{{ url_for('main.logout') }}">Выйти</a></p>
+{% endblock %}

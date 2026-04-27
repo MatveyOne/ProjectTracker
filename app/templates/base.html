@@ -7,6 +7,15 @@
 </head>
 <body>
     <main>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <section>
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </section>
+            {% endif %}
+        {% endwith %}
         {% block content %}{% endblock %}
     </main>
 </body>

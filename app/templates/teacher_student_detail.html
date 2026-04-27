@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}{{ student.name }}{% endblock %}
+
+{% block content %}
+<h1>{{ student.name }}</h1>
+<p>Проект: {{ project.title }}</p>
+
+{% if progress_entries %}
+    <ul>
+        {% for entry in progress_entries %}
+            <li>
+                {{ entry.stage.order_num }}. {{ entry.stage.title }} — {{ entry.status }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>По этому проекту пока нет прогресса.</p>
+{% endif %}
+{% endblock %}
