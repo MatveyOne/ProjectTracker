@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Сообщения{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="card soft-card rounded-4">
+            <div class="card-body">
+                <h1 class="h4 mb-1">Сообщения</h1>
+                <p class="text-secondary mb-3">{{ project.title }}</p>
+
+                {% if participants %}
+                    <div class="list-group">
+                        {% for participant in participants %}
+                            {% set is_active = participant.id == active_partner_id %}
+                            {% set unread_count = unread_by_partner.get(participant.id, 0) %}
+                            <a
+                                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {% if is_active %}active{% endif %}"
+                                href="{{ url_for('main.project_messages', project_id=project.id, student_id=participant.id) if current_user.role == 'teacher' else url_for('main.project_messages', project_id=project.id) }}"
+                            >
+                                <span class="me-2">{{ participant.full_name }}</span>
+                                {% if unread_count %}
+                                    <span class="badge {% if is_active %}text-bg-light text-dark{% else %}text-bg-warning{% endif %}">{{ unread_count }}</span>
+                                {% endif %}
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-light border mb-0">В проекте пока нет учеников.</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card soft-card rounded-4 mb-3">
+            <div class="card-body">
+                {% if active_partner %}
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h2 class="h5 mb-0">Диалог: {{ active_partner.full_name }}</h2>
+                    </div>
+
+                    {% if dialog_messages %}
+                        <div class="d-grid gap-3">
+                            {% for message in dialog_messages %}
+                                <article class="border rounded-3 p-3 {% if message.from_user_id == current_user.id %}bg-light{% endif %}">
+                                    <div class="d-flex justify-content-between align-items-center gap-3 mb-2">
+                                        <div class="small text-secondary">
+                                            <strong>{{ users_map[message.from_user_id].full_name }}</strong>
+                                            <span class="mx-1">→</span>
+                                            <strong>{{ users_map[message.to_user_id].full_name }}</strong>
+                                        </div>
+                                        <span class="badge {% if message.is_read %}text-bg-light border{% elif message.from_user_id == current_user.id %}text-bg-light border{% else %}text-bg-warning{% endif %}">
+                                            {% if message.from_user_id == current_user.id and message.is_read %}Прочитано{% elif message.from_user_id == current_user.id %}Отправлено{% elif message.is_read %}Прочитано{% else %}Новое{% endif %}
+                                        </span>
+                                    </div>
+
+                                    {% if message.text %}
+                                        <p class="mb-2">{{ message.text }}</p>
+                                    {% endif %}
+
+                                    {% if message.image_path %}
+                                        <a href="{{ url_for('main.message_image', message_id=message.id) }}" target="_blank" rel="noopener noreferrer">
+                                            <img
+                                                src="{{ url_for('main.message_image', message_id=message.id) }}"
+                                                alt="Изображение в сообщении"
+                                                class="img-fluid rounded border"
+                                                style="max-height: 220px;"
+                                            >
+                                        </a>
+                                    {% endif %}
+                                </article>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-light border mb-0">Сообщений в этом диалоге пока нет.</div>
+                    {% endif %}
+                {% else %}
+                    <div class="alert alert-light border mb-0">Выберите ученика для открытия чата.</div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if active_partner %}
+            <div class="card soft-card rounded-4">
+                <div class="card-body">
+                    <h2 class="h5 mb-3">Новое сообщение</h2>
+                    <form method="post" enctype="multipart/form-data">
+                        {% if current_user.role == 'teacher' %}
+                            <input type="hidden" name="student_id" value="{{ active_partner.id }}">
+                        {% endif %}
+
+                        <div class="mb-3">
+                            <label class="form-label" for="text">Текст</label>
+                            <textarea class="form-control" id="text" name="text" rows="4" placeholder="Введите сообщение"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="image">Изображение (png, jpg, jpeg, webp, до 5 MB)</label>
+                            <input class="form-control" id="image" name="image" type="file" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp">
+                        </div>
+                        <button class="btn btn-primary" type="submit">Отправить</button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

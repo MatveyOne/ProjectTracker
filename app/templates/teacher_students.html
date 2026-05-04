@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Ученики{% endblock %}
+
+{% block content %}
+{# Страница для быстрой привязки зарегистрированных учеников к проектам учителя. #}
+<div class="d-flex flex-column flex-md-row justify-content-md-between align-items-md-start gap-3 mb-4">
+    <div>
+        <h1 class="h3 mb-1">Ученики</h1>
+        <p class="text-secondary mb-0">Выберите проект и добавляйте учеников в один клик.</p>
+    </div>
+    <a class="btn btn-outline-secondary" href="{{ url_for('main.teacher_projects') }}">К проектам</a>
+</div>
+
+{% if projects %}
+    <form class="card card-body mb-3" method="get" action="{{ url_for('main.teacher_students') }}">
+        <label class="form-label" for="project_id">Текущий проект</label>
+        <div class="d-flex flex-column flex-md-row gap-2">
+            <select class="form-select" id="project_id" name="project_id">
+                {% for project in projects %}
+                    <option value="{{ project.id }}" {% if selected_project_id == project.id %}selected{% endif %}>
+                        {{ project.title }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button class="btn btn-outline-primary" type="submit">Показать</button>
+        </div>
+    </form>
+{% else %}
+    <div class="alert alert-warning border">Сначала создайте хотя бы один проект.</div>
+{% endif %}
+
+{% if students %}
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Ученик</th>
+                    <th>Email</th>
+                    <th>Статус</th>
+                    <th class="text-end">Действие</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                    {% set already_linked = student.id in linked_student_ids %}
+                    <tr>
+                        <td>{{ student.full_name }}</td>
+                        <td>{{ student.email }}</td>
+                        <td>
+                            {% if selected_project_id %}
+                                {% if already_linked %}
+                                    <span class="badge text-bg-light border">Уже в проекте</span>
+                                {% else %}
+                                    <span class="badge text-bg-secondary">Не добавлен</span>
+                                {% endif %}
+                            {% else %}
+                                <span class="badge text-bg-secondary">Проект не выбран</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">
+                            <form method="post" action="{{ url_for('main.teacher_students_assign') }}">
+                                <input type="hidden" name="student_id" value="{{ student.id }}">
+                                <input type="hidden" name="project_id" value="{{ selected_project_id or '' }}">
+                                <button class="btn btn-sm btn-outline-primary" type="submit" {% if not selected_project_id or already_linked %}disabled{% endif %}>
+                                    Добавить в проект
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="alert alert-light border">Зарегистрированных учеников пока нет.</div>
+{% endif %}
+{% endblock %}

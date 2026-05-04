@@ -8,6 +8,7 @@ DEFAULT_UPLOADS_DIR = BASE_DIR / "app" / "uploads"
 
 
 def _get_path_from_env(env_name, default_path):
+    # Берет путь из переменной окружения или использует значение по умолчанию.
     return Path(os.getenv(env_name, str(default_path))).expanduser().resolve()
 
 
@@ -16,6 +17,7 @@ UPLOADS_DIR = _get_path_from_env("PROJECTTRACKER_UPLOADS_DIR", DEFAULT_UPLOADS_D
 
 
 def _sqlite_uri(path):
+    # Формирует URI подключения к локальной SQLite базе.
     return f"sqlite:///{path}"
 
 

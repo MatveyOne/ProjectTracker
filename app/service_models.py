@@ -1,6 +1,11 @@
-from datetime import datetime
+from datetime import UTC, datetime
 
 from app.extensions import db
+
+
+def utc_now():
+    # Возвращает текущее UTC-время для служебных timestamp-полей.
+    return datetime.now(UTC)
 
 
 class Message(db.Model):
@@ -11,8 +16,9 @@ class Message(db.Model):
     from_user_id = db.Column(db.Integer, nullable=False)
     to_user_id = db.Column(db.Integer, nullable=False)
     text = db.Column(db.Text, nullable=False)
+    image_path = db.Column(db.String(500))
     is_read = db.Column(db.Boolean, default=False, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), default=utc_now, nullable=False)
 
 
 class ActionLog(db.Model):
@@ -23,7 +29,7 @@ class ActionLog(db.Model):
     project_id = db.Column(db.Integer)
     action_type = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), default=utc_now, nullable=False)
 
 
 class ApiLog(db.Model):
@@ -33,4 +39,4 @@ class ApiLog(db.Model):
     user_id = db.Column(db.Integer)
     endpoint = db.Column(db.String(255), nullable=False)
     method = db.Column(db.String(20), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), default=utc_now, nullable=False)

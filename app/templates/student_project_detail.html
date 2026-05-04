@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}{{ project.title }}{% endblock %}
+
+{% block content %}
+{# Страница проекта ученика: список этапов и переход к чату. #}
+<div class="d-flex flex-column flex-md-row justify-content-md-between align-items-md-start gap-3 mb-4">
+    <div>
+        <h1 class="mb-2">{{ project.title }}</h1>
+        <p class="text-secondary mb-0">{{ project.description }}</p>
+    </div>
+    <a class="btn btn-outline-secondary" href="{{ url_for('main.project_messages', project_id=project.id) }}">Сообщения по проекту</a>
+</div>
+
+{% if project.stages %}
+    <div class="list-group">
+        {% for stage in project.stages %}
+            <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="{{ url_for('main.student_stage_detail', stage_id=stage.id) }}">
+                <span>
+                    <strong>{{ stage.order_num }}.</strong> {{ stage.title }}
+                </span>
+                <span class="badge text-bg-light">Открыть</span>
+            </a>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-light border">Для проекта пока нет этапов.</div>
+{% endif %}
+{% endblock %}

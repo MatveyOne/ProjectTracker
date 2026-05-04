@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 
 from flask_login import UserMixin
 from sqlalchemy import UniqueConstraint
@@ -6,17 +6,37 @@ from sqlalchemy import UniqueConstraint
 from app.extensions import db, login_manager
 
 
+def utc_now():
+    # Возвращает текущее время в UTC для timestamp-полей.
+    return datetime.now(UTC)
+
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(255), unique=True, nullable=False)
     name = db.Column(db.String(120), nullable=False)
+    first_name = db.Column(db.String(120))
+    last_name = db.Column(db.String(120))
     password_hash = db.Column(db.String(255), nullable=False)
     role = db.Column(db.String(20), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), default=utc_now, nullable=False)
 
     projects = db.relationship("Project", back_populates="teacher", lazy=True)
     project_links = db.relationship("ProjectStudent", back_populates="student", lazy=True)
     progress_entries = db.relationship("Progress", back_populates="student", lazy=True)
+
+    @property
+    def full_name(self):
+        # Старые записи без first/last не ломают отображение имени.
+        first = (self.first_name or "").strip()
+        last = (self.last_name or "").strip()
+        if first and last:
+            return f"{first} {last}"
+        if first:
+            return first
+        if self.name:
+            return self.name
+        return self.email
 
 
 class Project(db.Model):
@@ -24,7 +44,7 @@ class Project(db.Model):
     title = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=False)
     teacher_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), default=utc_now, nullable=False)
 
     teacher = db.relationship("User", back_populates="projects", lazy=True)
     stages = db.relationship(
@@ -89,9 +109,9 @@ class Progress(db.Model):
     file_path = db.Column(db.String(500))
     comment = db.Column(db.Text)
     updated_at = db.Column(
-        db.DateTime,
-        default=datetime.utcnow,
-        onupdate=datetime.utcnow,
+        db.DateTime(timezone=True),
+        default=utc_now,
+        onupdate=utc_now,
         nullable=False,
     )
 
@@ -101,4 +121,5 @@ class Progress(db.Model):
 
 @login_manager.user_loader
 def load_user(user_id):
+    # Загружает пользователя по id из сессии Flask-Login.
     return db.session.get(User, int(user_id))

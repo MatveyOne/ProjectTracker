@@ -3,28 +3,42 @@
 {% block title %}Регистрация{% endblock %}
 
 {% block content %}
-<h1>Регистрация</h1>
-<form method="post">
-    <p>
-        <label for="name">Имя</label>
-        <input id="name" name="name" type="text" required>
-    </p>
-    <p>
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" required>
-    </p>
-    <p>
-        <label for="password">Пароль</label>
-        <input id="password" name="password" type="password" required>
-    </p>
-    <p>
-        <label for="role">Роль</label>
-        <select id="role" name="role" required>
-            <option value="">Выберите роль</option>
-            <option value="teacher">Учитель</option>
-            <option value="student">Ученик</option>
-        </select>
-    </p>
-    <button type="submit">Зарегистрироваться</button>
-</form>
+{# Регистрация с обязательными полями имени и фамилии. #}
+<div class="row justify-content-center">
+    <div class="col-md-9 col-lg-6">
+        <div class="card soft-card rounded-4">
+            <div class="card-body p-4">
+                <h1 class="h3 mb-3">Регистрация</h1>
+                <p class="text-secondary">Создайте учетную запись и выберите роль в системе.</p>
+                <form method="post" class="mt-4">
+                    <div class="mb-3">
+                        <label class="form-label" for="first_name">Имя</label>
+                        <input class="form-control" id="first_name" name="first_name" type="text" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="last_name">Фамилия</label>
+                        <input class="form-control" id="last_name" name="last_name" type="text" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="email">Email</label>
+                        <input class="form-control" id="email" name="email" type="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="password">Пароль</label>
+                        <input class="form-control" id="password" name="password" type="password" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label" for="role">Роль</label>
+                        <select class="form-select" id="role" name="role" required>
+                            <option value="">Выберите роль</option>
+                            <option value="teacher">Учитель</option>
+                            <option value="student">Ученик</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary w-100" type="submit">Зарегистрироваться</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

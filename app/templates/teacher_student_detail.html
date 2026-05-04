@@ -1,20 +1,44 @@
 {% extends "base.html" %}
 
-{% block title %}{{ student.name }}{% endblock %}
+{% block title %}{{ student.full_name }}{% endblock %}
 
 {% block content %}
-<h1>{{ student.name }}</h1>
-<p>Проект: {{ project.title }}</p>
+{# Карточка ученика внутри выбранного проекта. #}
+<div class="mb-3">
+    <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('main.teacher_project_detail', project_id=project.id) }}">
+        К проекту
+    </a>
+</div>
+<div class="d-flex flex-column flex-md-row justify-content-md-between align-items-md-start gap-3 mb-4">
+    <div>
+        <h1 class="mb-2">{{ student.full_name }}</h1>
+        <p class="small text-secondary mb-1">{{ student.email }}</p>
+        <p class="text-secondary mb-0">Проект: {{ project.title }}</p>
+    </div>
+</div>
 
-{% if progress_entries %}
-    <ul>
-        {% for entry in progress_entries %}
-            <li>
-                {{ entry.stage.order_num }}. {{ entry.stage.title }} — {{ entry.status }}
-            </li>
+{% if stage_rows %}
+    {# Показывает все этапы проекта, включая "не начат" без записи прогресса. #}
+    <div class="list-group">
+        {% for item in stage_rows %}
+            <div class="list-group-item">
+                <div class="d-flex justify-content-between align-items-center gap-3 mb-2">
+                    <span>{{ item.stage.order_num }}. {{ item.stage.title }}</span>
+                    <span class="badge text-bg-light border">{{ item.status_label }}</span>
+                </div>
+                {% if item.github_url %}
+                    <div class="small mb-1">
+                        GitHub:
+                        <a href="{{ item.github_url }}" target="_blank" rel="noopener noreferrer">{{ item.github_url }}</a>
+                    </div>
+                {% endif %}
+                {% if item.comment %}
+                    <div class="small text-secondary mb-2">Комментарий: {{ item.comment }}</div>
+                {% endif %}
+            </div>
         {% endfor %}
-    </ul>
+    </div>
 {% else %}
-    <p>По этому проекту пока нет прогресса.</p>
+    <div class="alert alert-light border">По этому проекту пока нет прогресса.</div>
 {% endif %}
 {% endblock %}
