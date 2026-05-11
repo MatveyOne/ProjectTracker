@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Ваши проекты{% endblock %}
+
+{% block content %}
+{# Список проектов, к которым ученик привязан учителем. #}
+<div class="d-flex justify-content-between align-items-start mb-4">
+    <div>
+        <h1 class="h3 mb-1">Ваши проекты</h1>
+    </div>
+    <a class="btn btn-outline-secondary" href="{{ url_for('main.profile') }}">Профиль</a>
+</div>
+
+{% if links %}
+    <div class="row g-3">
+        {% for link in links %}
+            <div class="col-md-6">
+                <a
+                    class="card soft-card h-100 rounded-4 text-decoration-none text-reset border-0"
+                    href="{{ url_for('main.student_project_detail', project_id=link.project.id) }}"
+                    aria-label="Открыть проект {{ link.project.title }}"
+                >
+                    <div class="card-body">
+                        <h2 class="h5">{{ link.project.title }}</h2>
+                        <p class="text-secondary mb-3">{{ link.project.description }}</p>
+                        <span class="btn btn-primary">Открыть проект</span>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-light border">Пока нет проектов, в которых вы участвуете.</div>
+{% endif %}
+{% endblock %}

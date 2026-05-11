@@ -1,22 +1,37 @@
 {% extends "base.html" %}
 
-{% block title %}Проекты учителя{% endblock %}
+{% block title %}Ваши проекты{% endblock %}
 
 {% block content %}
-<h1>Проекты учителя</h1>
-<p><a href="{{ url_for('main.teacher_project_new') }}">Создать проект</a></p>
+{# Список проектов текущего учителя. #}
+<div class="d-flex flex-column flex-md-row justify-content-md-between align-items-md-start gap-3 mb-4">
+    <div>
+        <h1 class="h3 mb-1">Ваши проекты</h1>
+    </div>
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-secondary" href="{{ url_for('main.profile') }}">Профиль</a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('main.teacher_students') }}">Ученики</a>
+        <a class="btn btn-primary" href="{{ url_for('main.teacher_project_new') }}">Создать проект</a>
+    </div>
+</div>
 
 {% if projects %}
-    <ul>
+    <div class="row g-3">
         {% for project in projects %}
-            <li>
-                <a href="{{ url_for('main.teacher_project_detail', project_id=project.id) }}">
-                    {{ project.title }}
-                </a>
-            </li>
+            <div class="col-md-6">
+                <div class="card soft-card h-100 rounded-4">
+                    <div class="card-body">
+                        <h2 class="h5">{{ project.title }}</h2>
+                        <p class="text-secondary">{{ project.description }}</p>
+                        <a class="btn btn-outline-primary" href="{{ url_for('main.teacher_project_detail', project_id=project.id) }}">
+                            Открыть проект
+                        </a>
+                    </div>
+                </div>
+            </div>
         {% endfor %}
-    </ul>
+    </div>
 {% else %}
-    <p>Проектов пока нет.</p>
+    <div class="alert alert-light border">Проектов пока нет.</div>
 {% endif %}
 {% endblock %}

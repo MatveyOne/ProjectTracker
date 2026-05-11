@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Аналитика: {{ project.title }}{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-md-between align-items-md-start gap-3 mb-4">
+    <div>
+        <h1 class="h3 mb-1">Аналитика проекта</h1>
+        <p class="text-secondary mb-0">{{ project.title }}</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-outline-success" href="{{ url_for('main.teacher_project_export_analytics_xlsx', project_id=project.id) }}">Скачать аналитику XLSX</a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('main.teacher_project_detail', project_id=project.id) }}">К проекту</a>
+    </div>
+</div>
+
+{% if not stages %}
+    <div class="alert alert-light border">В проекте пока нет этапов для расчета прогресса.</div>
+{% elif not student_rows %}
+    <div class="alert alert-light border">К проекту пока не привязаны ученики.</div>
+{% else %}
+    <div class="card soft-card rounded-4">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-3">Ученик</th>
+                            <th>Прогресс</th>
+                            <th>Выполнено</th>
+                            {% for stage in stages %}
+                                <th>
+                                    <div>{{ stage.order_num }}. {{ stage.title }}</div>
+                                    <div class="small text-secondary fw-normal">{{ stage.deadline.strftime('%d.%m.%Y %H:%M') }}</div>
+                                </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in student_rows %}
+                            <tr>
+                                <td class="ps-3">
+                                    <a
+                                        class="fw-semibold link-offset-2 link-underline link-underline-opacity-25"
+                                        href="{{ url_for('main.teacher_student_detail', student_id=row.student.id, project_id=project.id) }}"
+                                    >
+                                        {{ row.student.full_name }}
+                                    </a>
+                                    <div class="small text-secondary">{{ row.student.email }}</div>
+                                </td>
+                                <td>
+                                    <div class="fw-semibold">{{ row.progress_percent }}%</div>
+                                </td>
+                                <td>{{ row.completed_stages }}/{{ row.total_stages }}</td>
+                                {% for cell in row.stage_cells %}
+                                    <td>
+                                        <span class="badge {% if cell.badge_kind == 'warning' %}text-bg-warning text-dark{% elif cell.badge_kind == 'success' %}text-bg-success{% elif cell.badge_kind == 'danger' %}text-bg-danger{% else %}text-bg-light border{% endif %}">
+                                            {{ cell.status_label }}
+                                        </span>
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

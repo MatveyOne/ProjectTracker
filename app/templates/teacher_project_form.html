@@ -1,18 +1,25 @@
 {% extends "base.html" %}
 
-{% block title %}Новый проект{% endblock %}
+{% block title %}{{ form_title }}{% endblock %}
 
 {% block content %}
-<h1>Создать проект</h1>
-<form method="post">
-    <p>
-        <label for="title">Название проекта</label>
-        <input id="title" name="title" type="text" required>
-    </p>
-    <p>
-        <label for="description">Описание</label>
-        <textarea id="description" name="description" required></textarea>
-    </p>
-    <button type="submit">Сохранить проект</button>
-</form>
+{# Универсальная форма создания/редактирования учебного проекта. #}
+<div class="content-narrow">
+    <div class="card soft-card rounded-4">
+        <div class="card-body p-4">
+            <h1 class="h3 mb-3">{{ form_title }}</h1>
+            <form method="post">
+                <div class="mb-3">
+                    <label class="form-label" for="title">Название проекта</label>
+                    <input class="form-control" id="title" name="title" type="text" value="{{ project.title if project else '' }}" required>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label" for="description">Описание</label>
+                    <textarea class="form-control" id="description" name="description" rows="5" required>{{ project.description if project else '' }}</textarea>
+                </div>
+                <button class="btn btn-primary" type="submit">{{ submit_label }}</button>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

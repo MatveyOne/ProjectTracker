@@ -3,9 +3,133 @@
 {% block title %}ProjectTracker{% endblock %}
 
 {% block content %}
-<h1>ProjectTracker</h1>
-<p>Каркас приложения запущен.</p>
-<p>Следующий шаг: авторизация и рабочие сценарии.</p>
-<p><a href="{{ url_for('main.register') }}">Регистрация</a></p>
-<p><a href="{{ url_for('main.login') }}">Вход</a></p>
+{# Стартовая страница для неавторизованных пользователей. #}
+<style>
+    .landing-hero {
+        background: linear-gradient(135deg, #fafdff 0%, #eef2ff 100%);
+        border: 1px solid rgba(42, 93, 232, 0.14);
+        border-radius: 2rem;
+        padding: 2rem;
+    }
+
+    .landing-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: .45rem;
+        font-size: .8rem;
+        font-weight: 800;
+        letter-spacing: .02em;
+        color: #2454dc;
+        background: rgba(42, 93, 232, 0.09);
+        border-radius: 999px;
+        padding: .45rem .8rem;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+    }
+
+    .landing-tag-dot {
+        width: .45rem;
+        height: .45rem;
+        border-radius: 50%;
+        background: #2a5de8;
+    }
+
+    .landing-title {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: clamp(2.1rem, 5vw, 4.1rem);
+        line-height: .97;
+        letter-spacing: -0.03em;
+        margin-bottom: 1.25rem;
+        max-width: 12ch;
+    }
+
+    .landing-title-accent {
+        color: #2a5de8;
+    }
+
+    .landing-subtitle {
+        color: #5d6e8d;
+        font-size: clamp(1rem, 1.65vw, 1.4rem);
+        max-width: 28ch;
+        margin-bottom: 1.5rem;
+    }
+
+    .landing-visual {
+        border-radius: 1.6rem;
+        background: linear-gradient(155deg, #e8effd 0%, #dde7fb 100%);
+        border: 1px solid rgba(42, 93, 232, 0.14);
+        padding: 1rem;
+        min-height: 360px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .landing-visual svg {
+        width: 100%;
+        max-width: 540px;
+        height: auto;
+        display: block;
+    }
+
+    @media (max-width: 991.98px) {
+        .landing-visual {
+            min-height: 280px;
+            margin-top: .4rem;
+        }
+    }
+</style>
+
+<section class="landing-hero mb-4">
+    <div class="row g-4 align-items-center">
+        <div class="col-lg-6">
+            <div class="landing-tag">
+                <span class="landing-tag-dot"></span>
+                цифровая школа будущего
+            </div>
+            <h1 class="landing-title">
+                Ваш <span class="landing-title-accent">центр управления</span> проектным обучением
+            </h1>
+            <p class="landing-subtitle">
+                Единое пространство, где учитель контролирует этапы, а ученик показывает реальный прогресс.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+                <a class="btn btn-primary btn-lg px-4" href="{{ url_for('main.register') }}">Создать аккаунт</a>
+                <a class="btn btn-outline-secondary btn-lg px-4" href="{{ url_for('main.login') }}">Войти</a>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="landing-visual" aria-hidden="true">
+                <svg viewBox="0 0 700 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="18" y="20" width="664" height="382" rx="30" fill="#F6F9FF" stroke="#BFD2FC" stroke-width="3"/>
+                    <rect x="52" y="52" width="330" height="150" rx="18" fill="#FFFFFF" stroke="#D9E5FF"/>
+                    <rect x="74" y="79" width="132" height="16" rx="8" fill="#2A5DE8" fill-opacity="0.2"/>
+                    <rect x="74" y="109" width="260" height="12" rx="6" fill="#D8E3FF"/>
+                    <rect x="74" y="129" width="232" height="12" rx="6" fill="#D8E3FF"/>
+                    <rect x="74" y="159" width="92" height="24" rx="12" fill="#2A5DE8"/>
+
+                    <rect x="416" y="52" width="234" height="260" rx="18" fill="#FFFFFF" stroke="#D9E5FF"/>
+                    <rect x="441" y="82" width="120" height="13" rx="6" fill="#2A5DE8" fill-opacity="0.23"/>
+                    <rect x="441" y="108" width="184" height="10" rx="5" fill="#D8E3FF"/>
+                    <rect x="441" y="131" width="184" height="10" rx="5" fill="#D8E3FF"/>
+                    <rect x="441" y="154" width="184" height="10" rx="5" fill="#D8E3FF"/>
+                    <rect x="441" y="185" width="184" height="88" rx="12" fill="#F3F7FF"/>
+                    <path d="M460 250L487 219L514 240L549 204L595 250" stroke="#2A5DE8" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="487" cy="219" r="7" fill="#2A5DE8"/>
+                    <circle cx="549" cy="204" r="7" fill="#2A5DE8"/>
+
+                    <rect x="52" y="228" width="330" height="140" rx="18" fill="#FFFFFF" stroke="#D9E5FF"/>
+                    <rect x="74" y="254" width="120" height="13" rx="6" fill="#2A5DE8" fill-opacity="0.23"/>
+                    <rect x="74" y="278" width="280" height="10" rx="5" fill="#D8E3FF"/>
+                    <rect x="74" y="300" width="280" height="10" rx="5" fill="#D8E3FF"/>
+                    <rect x="74" y="326" width="200" height="22" rx="11" fill="#1EB573" fill-opacity="0.25"/>
+                    <rect x="282" y="326" width="72" height="22" rx="11" fill="#2A5DE8"/>
+
+                    <circle cx="382" cy="220" r="26" fill="#2A5DE8"/>
+                    <path d="M370 220H394M382 208V232" stroke="white" stroke-width="4" stroke-linecap="round"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}

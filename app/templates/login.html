@@ -3,16 +3,26 @@
 {% block title %}Вход{% endblock %}
 
 {% block content %}
-<h1>Вход</h1>
-<form method="post">
-    <p>
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" required>
-    </p>
-    <p>
-        <label for="password">Пароль</label>
-        <input id="password" name="password" type="password" required>
-    </p>
-    <button type="submit">Войти</button>
-</form>
+{# Форма входа по email и паролю. #}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-5">
+        <div class="card soft-card rounded-4">
+            <div class="card-body p-4">
+                <h1 class="h3 mb-3">Вход</h1>
+                <p class="text-secondary">Войдите в аккаунт учителя или ученика.</p>
+                <form method="post" class="mt-4">
+                    <div class="mb-3">
+                        <label class="form-label" for="email">Email</label>
+                        <input class="form-control" id="email" name="email" type="email" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label" for="password">Пароль</label>
+                        <input class="form-control" id="password" name="password" type="password" required>
+                    </div>
+                    <button class="btn btn-primary w-100" type="submit">Войти</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

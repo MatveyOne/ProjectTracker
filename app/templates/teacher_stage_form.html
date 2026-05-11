@@ -3,31 +3,44 @@
 {% block title %}{% if stage %}Редактирование этапа{% else %}Новый этап{% endif %}{% endblock %}
 
 {% block content %}
-<h1>{% if stage %}Редактирование этапа{% else %}Новый этап{% endif %}</h1>
-<form method="post">
-    <input name="project_id" type="hidden" value="{{ project.id }}">
-    <p>
-        <label for="title">Название этапа</label>
-        <input id="title" name="title" type="text" value="{{ stage.title if stage else '' }}" required>
-    </p>
-    <p>
-        <label for="description">Описание этапа</label>
-        <textarea id="description" name="description" required>{{ stage.description if stage else '' }}</textarea>
-    </p>
-    <p>
-        <label for="deadline">Дедлайн</label>
-        <input
-            id="deadline"
-            name="deadline"
-            type="datetime-local"
-            value="{{ stage.deadline.strftime('%Y-%m-%dT%H:%M') if stage else '' }}"
-            required
-        >
-    </p>
-    <p>
-        <label for="order_num">Порядковый номер</label>
-        <input id="order_num" name="order_num" type="number" min="1" value="{{ stage.order_num if stage else '' }}" required>
-    </p>
-    <button type="submit">{% if stage %}Сохранить этап{% else %}Создать этап{% endif %}</button>
-</form>
+{# Одна форма используется и для создания, и для редактирования этапа. #}
+<div class="mb-3">
+    <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('main.teacher_project_detail', project_id=project.id) }}">
+        К проекту
+    </a>
+</div>
+<div class="content-narrow">
+    <div class="card soft-card rounded-4">
+        <div class="card-body p-4">
+            <h1 class="h3 mb-3">{% if stage %}Редактирование этапа{% else %}Новый этап{% endif %}</h1>
+            <form method="post">
+                <input name="project_id" type="hidden" value="{{ project.id }}">
+                <div class="mb-3">
+                    <label class="form-label" for="title">Название этапа</label>
+                    <input class="form-control" id="title" name="title" type="text" value="{{ request.form.get('title', stage.title if stage else '') }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="description">Описание этапа</label>
+                    <textarea class="form-control" id="description" name="description" rows="5" required>{{ request.form.get('description', stage.description if stage else '') }}</textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="deadline">Дедлайн</label>
+                    <input
+                        class="form-control"
+                        id="deadline"
+                        name="deadline"
+                        type="datetime-local"
+                        value="{{ request.form.get('deadline', stage.deadline.strftime('%Y-%m-%dT%H:%M') if stage else '') }}"
+                        required
+                    >
+                </div>
+                <div class="mb-4">
+                    <label class="form-label" for="order_num">Порядковый номер</label>
+                    <input class="form-control" id="order_num" name="order_num" type="number" min="1" value="{{ request.form.get('order_num', stage.order_num if stage else '') }}" required>
+                </div>
+                <button class="btn btn-primary" type="submit">{% if stage %}Сохранить этап{% else %}Создать этап{% endif %}</button>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

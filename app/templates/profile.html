@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Профиль{% endblock %}
+
+{% block content %}
+<div class="content-narrow">
+    <div class="card soft-card rounded-4 mb-3">
+        <div class="card-body p-4">
+            <h1 class="h3 mb-3">Профиль</h1>
+            <form method="post" class="mb-0">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="first_name">Имя</label>
+                        <input class="form-control" id="first_name" name="first_name" type="text" value="{{ user.first_name or '' }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="last_name">Фамилия</label>
+                        <input class="form-control" id="last_name" name="last_name" type="text" value="{{ user.last_name or '' }}" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="email">Email</label>
+                        <input class="form-control" id="email" name="email" type="email" value="{{ user.email }}" required>
+                    </div>
+                </div>
+
+                <hr class="my-4">
+                <h2 class="h5 mb-3">Смена пароля</h2>
+                <p class="text-secondary small mb-3">Заполните все поля ниже только если нужно сменить пароль.</p>
+
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label" for="current_password">Текущий пароль</label>
+                        <input class="form-control" id="current_password" name="current_password" type="password" autocomplete="current-password">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="new_password">Новый пароль</label>
+                        <input class="form-control" id="new_password" name="new_password" type="password" autocomplete="new-password">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="new_password_confirm">Подтверждение нового пароля</label>
+                        <input class="form-control" id="new_password_confirm" name="new_password_confirm" type="password" autocomplete="new-password">
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <button class="btn btn-primary" type="submit">Сохранить изменения</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
